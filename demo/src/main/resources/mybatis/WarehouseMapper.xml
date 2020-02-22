@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.WarehouseDao">
+	<resultMap id="BaseResultMap" type="com.example.demo.model.WarehouseModel" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="product_id" property="productId" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+
+		<result column="amount" property="amount" jdbcType="INTEGER" />
+		<result column="name" property="productName" jdbcType="VARCHAR" />
+		<result column="number" property="number" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="get" resultMap="BaseResultMap">
+		select w.id,w.product_id,w.amount,w.update_time,w.create_time,p.name,p.number from warehouse w left join product p on w.product_id = p.id where w.id = #{value}
+	</select>
+	 <select id="list" resultMap="BaseResultMap">
+		 select w.id,w.product_id,w.update_time,w.create_time,w.amount,p.name,p.number
+		 from warehouse w left join product p on w.product_id = p.id
+		 <where>
+			 1=1
+			 <if test="id != null and id != ''"> and w.id = #{id} </if>
+			 <if test="productName != null and productName != ''"> and p.name = #{productName} </if>
+			 <if test="updateTime != null and updateTime != ''"> and w.update_time = #{updateTime} </if>
+			 <if test="createTime != null and createTime != ''"> and w.create_time = #{createTime} </if>
+			 <if test="productId != null and productId != ''"> and w.product_id = #{productId}</if>
+		 </where>
+		 <choose>
+			 <when test="sort != null and sort.trim() != ''">
+				 order by ${sort} ${order}
+			 </when>
+			 <otherwise>
+				 order by w.id desc
+			 </otherwise>
+		 </choose>
+		 <if test="offset != null and limit != null">
+			 limit #{offset}, #{limit}
+		 </if>
+	 </select>
+
+	<select id="count" resultType="int">
+		select count(*)  from warehouse w left join product p on w.product_id = p.id
+		<where>
+			1=1
+			<if test="id != null and id != ''"> and w.id = #{id} </if>
+			<if test="productName != null and productName != ''"> and p.name = #{productName} </if>
+			<if test="updateTime != null and updateTime != ''"> and w.update_time = #{updateTime} </if>
+			<if test="createTime != null and createTime != ''"> and w.create_time = #{createTime} </if>
+			<if test="productId != null and productId != ''"> and w.product_id = #{productId}</if>
+
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.example.demo.model.WarehouseModel">
+		insert into warehouse
+		(
+			id,
+			product_id,
+			amount,
+			update_time,
+			create_time
+		)
+		values
+		(
+			#{id},
+			#{productId},
+			#{amount},
+			#{updateTime},
+			#{createTime}
+		)
+	</insert>
+	<delete id="remove">
+		delete from product where id = #{value}
+	</delete>
+	<!--修改数量-->
+	<update id="updateAmount" parameterType="map">
+		update warehouse
+		set amount = #{amount},update_time = #{updateTime}
+		where product_id = #{productId}
+	</update>
+</mapper>

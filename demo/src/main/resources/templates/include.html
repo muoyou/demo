@@ -1,0 +1,93 @@
+<head th:fragment="header">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="css/bootstrap.min.css?v=3.3.6"
+		  th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+	<link href="/css/plugins/bootstrap-table/bootstrap-table.min.css"
+		  th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}"
+		  rel="stylesheet">
+	<link href="/css/plugins/jsTree/style.min.css" rel="stylesheet">
+	<link href="/css/plugins/jqTreeGrid/jquery.treegrid.css"
+		  rel="stylesheet">
+	<!--summernote css -->
+	<link href="/css/plugins/summernote/summernote-0.8.8.css"
+		  rel="stylesheet">
+	<link href="/css/plugins/chosen/chosen.css" rel="stylesheet">
+	<link href="/css/style.css?v=4.1.0" th:href="@{/css/style.css?v=4.1.0}"
+		  rel="stylesheet">
+	<style>
+		fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver;-webkit-border-radius: 5px;border-radius: 5px;}
+		legend{padding:.5em;border:0;width:auto}
+		/*body{zoom: 80%}*/
+	</style>
+	<style>
+		input[name="aaa"] {
+			height: 30px;
+			width: 115px;
+		}
+	</style>
+</head>
+<div th:fragment="footer">
+	<script src="/js/jquery.min.js?v=2.1.4"></script>
+	<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script
+			src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="/js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="/js/plugins/validate/messages_zh.min.js"></script>
+	<script src="/js/plugins/jsTree/jstree.min.js"></script>
+	<script src="/js/plugins/jqTreeGrid/jquery.treegrid.min.js"></script>
+	<script src="/js/plugins/jqTreeGrid/jquery.treegrid.extension.js"></script>
+	<script src="/js/plugins/jqTreeGrid/jquery.treegrid.bootstrap3.js"></script>
+	<script src="/js/plugins/chosen/chosen.jquery.js"></script>
+	<script src="/js/plugins/layer/layer.js"></script>
+	<!--summernote-->
+	<script type="text/javascript">
+<!--		设置cookie-->
+		function setCookie(cname,cvalue,exdays)
+		{
+			var d = new Date();
+			d.setTime(d.getTime()+(exdays*24*60*60*1000));
+			var expires = "expires="+d.toGMTString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
+		}
+		//获取cookie
+		function getCookie(cname)
+		{
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++)
+			{
+				var c = ca[i].trim();
+				if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+			}
+			return "";
+		}
+		//保存需要隐藏的列，参数：需要隐藏的bootstrapTable，随便起个名字，注意：不同页面一定不要重复
+		//cookie有效期36000天
+		function saveHiddenColumnToCookie(gridName){
+			$("[type='checkbox']").on("click", function(){
+				var hiddenColumns = $('#exampleTable').bootstrapTable('getHiddenColumns');
+				var col = '';
+				$.each(hiddenColumns,function(i,item){
+					col += item['field'] + ",";
+				})
+				setCookie(gridName,col,36000)
+			});
+		}
+		//将需要隐藏的列在cookie中取出，并在页面初始化完成后隐藏这些列
+		function getCookiesForHiddenColumn(gridName){
+			var col = getCookie(gridName);
+			col = col.split(",");
+			$.each(col,function(i,item){
+				$('#exampleTable').bootstrapTable('hideColumn',item)
+			})
+		}
+
+	</script>
+</div>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${warehouse.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">产品名：</label>
+								<div class="col-sm-8">
+									<input id="productName" name="productName" th:value="${warehouse.productName}" class="form-control" type="text" readonly>
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">出库数量：</label>
+								<div class="col-sm-8">
+									<input id="amount" name="amount" th:value="${warehouse.amount}" class="form-control" type="number" required min="1">
+								</div>
+							</div>
+
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/warehouse/edit.js">
+	</script>
+</body>
+</html>

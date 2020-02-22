@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.ProductDao">
+
+	<resultMap id="BaseResultMap" type="com.example.demo.model.ProductModel" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="number" property="number" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+	</resultMap>
+	<select id="get" resultMap="BaseResultMap">
+		select id,name,number,update_time,create_time from product where id = #{value}
+	</select>
+
+	<select id="list" resultMap="BaseResultMap">
+		select id,name,number,update_time,create_time from product
+        <where>
+         1=1
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="number != null and number != ''"> and number = #{number} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from product
+		 <where>
+			 1=1
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="number != null and number != ''"> and number = #{number} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.example.demo.model.ProductModel">
+		insert into product
+		(
+			id,
+			name,
+			number,
+			update_time,
+			create_time
+		)
+		values
+		(
+			#{id}, 
+			#{name}, 
+			#{number}, 
+			#{updateTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.example.demo.model.ProductModel">
+		update product 
+		<set>
+			<if test="name != null">name = #{name}, </if>
+			<if test="number != null">number = #{number}, </if>
+			<if test="updateTime != null">update_time = #{updateTime}, </if>
+			<if test="createTime != null">create_time = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from product where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from product where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
